@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Camera - Skin Analyzer</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+    *{box-sizing:border-box;font-family:'Poppins',sans-serif}
+    body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:url('https://www.news-medical.net/image-handler/picture/2019/6/shutterstock_1083859292.jpg') no-repeat center center fixed;background-size:cover;margin:0}
+    body::before{content:'';position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:0}
+    .wrapper{position:relative;z-index:1;width:820px;max-width:96%;margin:30px auto;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.12);backdrop-filter:blur(8px);border-radius:14px;padding:24px;color:#fff;display:flex;gap:20px;flex-wrap:wrap}
+    .left, .right{flex:1 1 380px;min-width:300px}
+    video{width:100%;border-radius:10px;background:#000}
+    .controls{margin-top:12px;display:flex;gap:8px;align-items:center}
+    .btn{background:#fff;color:#222;border:none;padding:10px 16px;border-radius:10px;cursor:pointer;font-weight:600}
+    .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.18);color:#fff}
+    .hint{font-size:13px;color:#ddd;margin-top:8px}
+    .uploader{margin-top:12px}
+    input[type=file]{color:#fff}
+    .preview{margin-top:12px;border-radius:8px;overflow:hidden;background:#000;height:280px;display:flex;align-items:center;justify-content:center}
+    .preview img{max-width:100%;max-height:100%;display:block}
+    .status{margin-top:12px;padding:10px;border-radius:8px;background:rgba(0,0,0,0.25);color:#fff;font-weight:600}
+    .small{font-size:13px;color:#ccc}
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="left">
+      <h2 style="margin:0 0 8px 0">Capture photo</h2>
+      <video id="video" autoplay playsinline></video>
+      <div class="controls">
+        <button id="captureBtn" class="btn">Capture & Analyze</button>
+        <button id="switchBtn" class="btn secondary" title="Switch to file upload">Upload Photo Instead</button>
+      </div>
+      <div class="hint small">Allow camera access when browser prompts. If camera is not available, use the upload option.</div>
+    </div>
+
+    <div class="right">
+      <h2 style="margin:0 0 8px 0">Upload or preview</h2>
+
+      <div class="uploader" id="uploaderBlock" style="display:none">
+        <input type="file" id="fileInput" accept="image/*">
+        <div class="hint small">Choose a photo from your device (or drag & drop in some browsers).</div>
+      </div>
+
+      <div class="preview" id="preview">
+        <span class="small">No photo yet</span>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:12px;align-items:center">
+        <button id="analyzeFileBtn" class="btn" style="display:none">Analyze Uploaded Photo</button>
+        <div id="progress" class="status" style="display:none">Analyzing... please wait</div>
+      </div>
+
+      <div id="resultNote" class="status" style="display:none"></div>
+    </div>
+  </div>
+
+<script>
+(async function(){
+  // Helper: show messages
+  const preview = document.getElementById('preview');
+  const progress = document.getElementById('progress');
+  const resultNote = document.getElementById('resultNote');
+
+  function setPreviewContent(node){
+    preview.innerHTML = '';
+    preview.appendChild(node);
+  }
+  function showStatus(text){ resultNote.style.display='block'; resultNote.innerText = text; }
+
+  // Try camera
+  const video = document.getElementById('video');
+  const captureBtn = document.getElementById('captureBtn');
+  const switchBtn = document.getElementById('switchBtn');
+  const uploaderBlock = document.getElementById('uploaderBlock');
+  const fileInput = document.getElementById('fileInput');
+  const analyzeFileBtn = document.getElementById('analyzeFileBtn');
+
+  let stream = null;
+  async function startCamera(){
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }});
+      video.srcObject = stream;
+      await new Promise(res => video.onloadedmetadata = res);
+      // clear preview text
+      preview.innerHTML = '<span class="small">Live camera feed — click Capture to analyze</span>';
+    } catch (err) {
+      preview.innerHTML = '<span class="small">Camera not available. Use upload option.</span>';
+      console.warn('Camera error', err);
+      // show upload by default
+      toggleUpload(true);
+    }
+  }
+
+  function stopCamera(){
+    if (stream){
+      stream.getTracks().forEach(t=>t.stop());
+      stream = null;
+    }
+  }
+
+  function toggleUpload(show){
+    if (show){
+      uploaderBlock.style.display = 'block';
+      analyzeFileBtn.style.display = 'inline-block';
+      video.style.display = 'none';
+      captureBtn.style.display = 'none';
+      switchBtn.innerText = 'Use Camera Instead';
+    } else {
+      uploaderBlock.style.display = 'none';
+      analyzeFileBtn.style.display = 'none';
+      video.style.display = 'block';
+      captureBtn.style.display = 'inline-block';
+      switchBtn.innerText = 'Upload Photo Instead';
+    }
+  }
+
+  switchBtn.addEventListener('click', ()=>{
+    const showingUpload = uploaderBlock.style.display !== 'none';
+    if (showingUpload){
+      toggleUpload(false);
+      startCamera();
+    } else {
+      toggleUpload(true);
+      stopCamera();
+    }
+  });
+
+  // file input preview
+  fileInput.addEventListener('change', ()=>{
+    const f = fileInput.files[0];
+    if (!f) return;
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(f);
+    img.onload = ()=>URL.revokeObjectURL(img.src);
+    setPreviewContent(img);
+  });
+
+  // capture & analyze handler
+  captureBtn.addEventListener('click', async ()=> {
+    // create canvas snapshot
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth || 640;
+    canvas.height = video.videoHeight || 480;
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    progress.style.display = 'inline-block';
+    progress.innerText = 'Analyzing...';
+    resultNote.style.display = 'none';
+
+    canvas.toBlob(async (blob) => {
+      if (!blob) { progress.style.display='none'; alert('Capture failed'); return; }
+
+      // prepare FormData
+      const fd = new FormData();
+      fd.append('image', blob, 'capture.jpg');
+
+      // attach quiz answers from localStorage if present
+      const quizJson = localStorage.getItem('quiz_answers') || '{}';
+      fd.append('quiz', quizJson);
+
+      try {
+        const resp = await fetch('upload_and_predict.php', { method: 'POST', body: fd });
+        const json = await resp.json();
+        progress.style.display='none';
+        if (json.error){ showStatus('Error: ' + json.error); return; }
+        // Save result and redirect to result page
+        localStorage.setItem('analysis_result', JSON.stringify(json));
+        window.location.href = 'result.html';
+      } catch (err) {
+        progress.style.display='none';
+        console.error(err);
+        showStatus('Analysis failed. Check console for details.');
+      }
+    }, 'image/jpeg', 0.9);
+  });
+
+  // analyze uploaded file
+  analyzeFileBtn.addEventListener('click', async ()=>{
+    const f = fileInput.files[0];
+    if (!f) { alert('Select a file first'); return; }
+
+    progress.style.display = 'inline-block';
+    progress.innerText = 'Analyzing uploaded photo...';
+    resultNote.style.display = 'none';
+
+    const fd = new FormData();
+    fd.append('image', f, f.name);
+    const quizJson = localStorage.getItem('quiz_answers') || '{}';
+    fd.append('quiz', quizJson);
+
+    try {
+      const resp = await fetch('upload_and_predict.php', { method: 'POST', body: fd });
+      const json = await resp.json();
+      progress.style.display='none';
+      if (json.error){ showStatus('Error: ' + json.error); return; }
+      localStorage.setItem('analysis_result', JSON.stringify(json));
+      window.location.href = 'result.html';
+    } catch (err) {
+      progress.style.display='none';
+      console.error(err);
+      showStatus('Analysis failed. Check console for details.');
+    }
+  });
+
+  // show saved preview if any (when user came from file input)
+  const savedImage = localStorage.getItem('camera_preview_blob_url');
+  if (savedImage){
+    const img = document.createElement('img');
+    img.src = savedImage;
+    setPreviewContent(img);
+  }
+
+  // start camera by default
+  toggleUpload(false);
+  await startCamera();
+
+  // Helpful note if user did not complete quiz
+  if (!localStorage.getItem('quiz_answers')){
+    showStatus('Note: No quiz answers found. Complete the quiz first for combined prediction.');
+  }
+})();
+</script>
+</body>
+</html>

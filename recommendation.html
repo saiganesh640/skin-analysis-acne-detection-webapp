@@ -1,0 +1,55 @@
+<?php
+$acne = $_POST['acne'] ?? 'not specified';
+$stress = $_POST['stress'] ?? 'not specified';
+$sleep = $_POST['sleep'] ?? 'not specified';
+$water = $_POST['water'] ?? 'not specified';
+$skinType = $_POST['skinType'] ?? 'clear';
+
+$recommendations = [];
+
+if ($skinType == "clear") {
+    $recommendations[] = "Your skin looks great! Maintain it with a gentle cleanser and sunscreen.";
+} elseif ($skinType == "mild acne") {
+    $recommendations[] = "Use a salicylic acid-based cleanser and lightweight moisturizer.";
+} elseif ($skinType == "moderate acne") {
+    $recommendations[] = "Use benzoyl peroxide gel at night and avoid oily creams.";
+} else {
+    $recommendations[] = "Consult a dermatologist for a customized treatment.";
+}
+
+if ($stress == "high") {
+    $recommendations[] = "Try yoga or meditation to manage stress — it reduces acne flare-ups.";
+}
+if ($sleep == "less5") {
+    $recommendations[] = "Get 7–8 hours of sleep to help your skin repair overnight.";
+}
+if ($water == "low") {
+    $recommendations[] = "Increase your water intake — hydration reduces oiliness and toxins.";
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Personalized Recommendations</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="wrapper">
+    <h1>💆 Personalized Skin Report</h1>
+    <h3>Detected Skin Type: <?= htmlspecialchars($skinType) ?></h3>
+
+    <ul style="margin-top:20px;">
+      <?php foreach ($recommendations as $tip): ?>
+        <li><?= htmlspecialchars($tip) ?></li>
+      <?php endforeach; ?>
+    </ul>
+
+    <div class="btn-container" style="margin-top:30px;">
+      <a href="quiz.html" class="btn">🧩 Retake Quiz</a>
+      <a href="camera.html" class="btn">📷 Recheck Skin</a>
+    </div>
+  </div>
+</body>
+</html>

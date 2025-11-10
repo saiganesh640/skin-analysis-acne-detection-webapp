@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Analysis Result - Skin Analyzer</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+    *{box-sizing:border-box}
+    body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:url('https://www.news-medical.net/image-handler/picture/2019/6/shutterstock_1083859292.jpg') no-repeat center center fixed;background-size:cover;margin:0}
+    body::before{content:'';position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:0}
+    .card{position:relative;z-index:1;width:720px;max-width:94%;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.12);backdrop-filter:blur(8px);border-radius:14px;padding:26px;color:#fff}
+    h1{margin:0 0 12px 0}
+    .result-grid{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+    .panel{flex:1 1 220px;background:rgba(255,255,255,0.04);padding:18px;border-radius:10px}
+    .severity{font-size:28px;font-weight:700;margin:6px 0}
+    .confidence{font-size:22px;color:#e8e8e8;margin:6px 0}
+    .raw{margin-top:12px;background:rgba(0,0,0,0.25);padding:10px;border-radius:8px;white-space:pre-wrap;color:#ddd}
+    .btn{margin-top:14px;padding:10px 14px;border-radius:10px;border:none;background:#fff;color:#222;font-weight:700;cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Skin Analysis Result</h1>
+    <div class="result-grid">
+      <div class="panel">
+        <div class="small">Predicted Condition</div>
+        <div id="severity" class="severity">-</div>
+        <div class="small">Confidence</div>
+        <div id="confidence" class="confidence">-</div>
+        <button id="backBtn" class="btn">Back to Camera</button>
+      </div>
+
+      <div class="panel">
+        <div class="small">Recommendation</div>
+        <div id="recommendation">Based on the model result, we will show recommendations here.</div>
+
+        <div class="raw" id="rawjson" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const raw = localStorage.getItem('analysis_result');
+  if (!raw){
+    document.getElementById('severity').innerText = 'No result';
+    document.getElementById('confidence').innerText = '-';
+    return;
+  }
+  const json = JSON.parse(raw);
+
+  document.getElementById('severity').innerText = json.severity || 'Unknown';
+  document.getElementById('confidence').innerText = (json.confidence ? json.confidence + '%' : 'N/A');
+
+  // Basic recommendation rules (customize)
+  const rec = document.getElementById('recommendation');
+  if (json.severity && json.severity.toLowerCase().includes('clear')) {
+    rec.innerHTML = 'Skin looks clear. Maintain a gentle cleanser, sunscreen and a balanced diet.';
+  } else if (json.severity && json.severity.toLowerCase().includes('moderate')) {
+    rec.innerHTML = 'Moderate acne: consider a salicylic acid cleanser, topical benzoyl peroxide spot treatment, and consult a dermatologist for persistent cases.';
+  } else if (json.severity && json.severity.toLowerCase().includes('severe')) {
+    rec.innerHTML = 'Severe acne: please consult a dermatologist — prescription treatments may be needed.';
+  } else {
+    rec.innerHTML = 'No specific recommendation available.';
+  }
+
+  // Optionally show raw JSON for debugging
+  document.getElementById('rawjson').innerText = JSON.stringify(json, null, 2);
+  document.getElementById('rawjson').style.display = 'none';
+
+  document.getElementById('backBtn').addEventListener('click', ()=> {
+    // Go back to camera to retake / upload another
+    window.location.href = 'camera.html';
+  });
+});
+</script>
+</body>
+</html>

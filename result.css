@@ -1,0 +1,29 @@
+.result-box {
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  color: #fff;
+  margin-top: 20px;
+}
+
+.result-box h2 {
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.result-box p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.result-box .tips {
+  text-align: left;
+  margin-top: 10px;
+}
+
+.result-box ul {
+  list-style: disc;
+  margin-left: 20px;
+}

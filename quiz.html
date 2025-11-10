@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skin Quiz</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Simple modal styles (keeps visual consistent) */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .modal {
+      background: rgba(255,255,255,0.06);
+      border: 2px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(8px);
+      color: #fff;
+      width: 90%;
+      max-width: 520px;
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .modal h3 { margin: 0 0 8px 0; font-size: 18px; }
+    .review-list { margin-top: 12px; }
+    .review-list li { margin: 8px 0; font-size: 15px; }
+    .modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:14px; }
+    .btn.confirm { background: #fff; color: #222; padding: 8px 14px; border-radius: 10px; border: none; font-weight: 600; cursor:pointer; }
+    .btn.edit { background: transparent; color: #fff; padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.18); cursor:pointer; }
+    /* small message styling (keeps consistent) */
+    #message { margin-top: 20px; display: none; text-align: center; font-weight: bold; color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <form id="quizForm">
+      <h1>Skin Health Quiz 🌿</h1>
+
+      <!-- Question 1 -->
+      <div class="question">
+        <label>1. How often do you notice oil or shine on your face?</label><br>
+        <label><input type="radio" name="q1" value="rarely" required> Rarely</label><br>
+        <label><input type="radio" name="q1" value="sometimes"> Sometimes</label><br>
+        <label><input type="radio" name="q1" value="often"> Often</label><br>
+        <label><input type="radio" name="q1" value="always"> Always</label><br>
+      </div>
+
+      <!-- Question 2 -->
+      <div class="question">
+        <label>2. How many hours of sleep do you get on average?</label><br>
+        <label><input type="radio" name="q2" value="less6" required> Less than 6 hours</label><br>
+        <label><input type="radio" name="q2" value="6to8"> 6–8 hours</label><br>
+        <label><input type="radio" name="q2" value="8plus"> More than 8 hours</label><br>
+      </div>
+
+      <!-- Question 3 -->
+      <div class="question">
+        <label>3. How much water do you drink daily?</label><br>
+        <label><input type="radio" name="q3" value="1L" required> Less than 1L</label><br>
+        <label><input type="radio" name="q3" value="1to2L"> 1–2L</label><br>
+        <label><input type="radio" name="q3" value="2plus"> More than 2L</label><br>
+      </div>
+
+      <!-- Question 4 -->
+      <div class="question">
+        <label>4. Do you experience acne or pimples frequently?</label><br>
+        <label><input type="radio" name="q4" value="never" required> Never</label><br>
+        <label><input type="radio" name="q4" value="sometimes"> Sometimes</label><br>
+        <label><input type="radio" name="q4" value="often"> Often</label><br>
+        <label><input type="radio" name="q4" value="always"> Always</label><br>
+      </div>
+
+      <!-- Question 5 -->
+      <div class="question">
+        <label>5. How would you rate your stress level?</label><br>
+        <label><input type="radio" name="q5" value="low" required> Low</label><br>
+        <label><input type="radio" name="q5" value="moderate"> Moderate</label><br>
+        <label><input type="radio" name="q5" value="high"> High</label><br>
+      </div>
+
+      <button type="submit" class="btn">Submit</button>
+
+      <div id="message">
+        ✅ Submitted Successfully!
+      </div>
+    </form>
+  </div>
+
+  <!-- Review Modal -->
+  <div class="modal-backdrop" id="reviewModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal" role="document">
+      <h3>Review your answers</h3>
+      <ul class="review-list" id="reviewList"></ul>
+      <div class="modal-actions">
+        <button class="btn edit" id="editBtn">Edit</button>
+        <button class="btn confirm" id="confirmBtn">Confirm & Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const quizForm = document.getElementById("quizForm");
+      const message = document.getElementById("message");
+      const reviewModal = document.getElementById("reviewModal");
+      const reviewList = document.getElementById("reviewList");
+      const editBtn = document.getElementById("editBtn");
+      const confirmBtn = document.getElementById("confirmBtn");
+
+      function collectAnswers(form){
+        const answers = {};
+        // radio, checkbox, select, textarea, text/number
+        const selected = form.querySelectorAll("input[type='radio']:checked, input[type='checkbox']:checked, select, textarea, input[type='text'], input[type='number']");
+        selected.forEach(el=>{
+          if(!el.name) return;
+          // if checkbox with same name, collect array
+          if(el.type === 'checkbox'){
+            if(!answers[el.name]) answers[el.name] = [];
+            if(el.checked) answers[el.name].push(el.value);
+            return;
+          }
+          answers[el.name] = el.value;
+        });
+        return answers;
+      }
+
+      function prettyLabel(name){
+        // map internal names to friendly labels
+        const map = {
+          q1: 'Oiliness',
+          q2: 'Sleep (hours)',
+          q3: 'Water intake',
+          q4: 'Acne frequency',
+          q5: 'Stress level'
+        };
+        return map[name] || name;
+      }
+
+      function showReview(answers){
+        reviewList.innerHTML = '';
+        for(const k in answers){
+          const li = document.createElement('li');
+          const val = Array.isArray(answers[k]) ? answers[k].join(', ') : answers[k];
+          li.textContent = `${prettyLabel(k)}: ${val}`;
+          reviewList.appendChild(li);
+        }
+        reviewModal.style.display = 'flex';
+        reviewModal.setAttribute('aria-hidden','false');
+      }
+
+      function hideReview(){ 
+        reviewModal.style.display = 'none';
+        reviewModal.setAttribute('aria-hidden','true');
+      }
+
+      quizForm.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        // collect answers
+        const answers = collectAnswers(quizForm);
+
+        // show review modal
+        showReview(answers);
+      });
+
+      editBtn.addEventListener('click', (e)=>{
+        hideReview();
+      });
+
+      confirmBtn.addEventListener('click', (e)=>{
+        // get answers from modal list (recollect to be safe)
+        const answers = collectAnswers(quizForm);
+
+        // save to localStorage
+        localStorage.setItem('quiz_answers', JSON.stringify(answers));
+
+        // show success message
+        message.style.display = 'block';
+
+        hideReview();
+
+        // small delay then redirect to camera
+        setTimeout(()=> {
+          window.location.href = 'camera.html';
+        }, 1500);
+      });
+
+      // allow Esc to close modal (edit)
+      document.addEventListener('keydown', (ev)=>{
+        if(ev.key === 'Escape' && reviewModal.style.display === 'flex') hideReview();
+      });
+    })();
+  </script>
+</body>
+</html>

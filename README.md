@@ -208,6 +208,6 @@ remaining 4 files/folders and datasets present in (acne detection project) folde
 1. https://drive.google.com/drive/folders/10rG4bgMrSpjHQySrB2gb5MhUIdl_qRaa?usp=drive_link
 2. https://drive.google.com/drive/folders/1RWY_5Qpz9OyGiuXDSrRnJqyo34JmMgy7?usp=drive_link
 3. https://drive.google.com/drive/folders/1LXmoKj6qLhVXpPLRJEaja6BlQo2z8Cbc?usp=drive_link
-4. 
+4. https://drive.google.com/drive/folders/1vitNc8fqloRD94o0HT3nTd8k6znK3aG0?usp=drive_link
 
 

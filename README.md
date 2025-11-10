@@ -6,6 +6,16 @@ A full-stack web app that analyzes facial images to detect acne severity (Clear,
 ---
 
 ##  Project Overview
+![Python](https://img.shields.io/badge/Python-3.9%2B-blue?logo=python)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange?logo=tensorflow)
+![Keras](https://img.shields.io/badge/Keras-Deep_Learning-red?logo=keras)
+![Flask](https://img.shields.io/badge/Flask-Web_Framework-black?logo=flask)
+![PHP](https://img.shields.io/badge/PHP-7.4%2B-blue?logo=php)
+![MySQL](https://img.shields.io/badge/MySQL-Database-blue?logo=mysql)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow?logo=javascript)
+![HTML5](https://img.shields.io/badge/HTML5-Web-orange?logo=html5)
+![CSS3](https://img.shields.io/badge/CSS3-Stylesheet-blue?logo=css3)
+
 
 This project is a friendly AI-powered Skin Health Analyzer that helps you understand your acne severity from a simple facial photo. It combines smart deep learning technology with a smooth web experience built using Flask and PHP. After signing up and answering a quick skin quiz, you can upload or snap a picture of your face, and the AI will tell you whether your skin is Clear, Moderate, or Severely affected by acne  with a confidence score. Based on both your quiz answers and the AI’s prediction, it also gives you personalized tips to take better care of your skin.
 

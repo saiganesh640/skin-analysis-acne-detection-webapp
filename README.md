@@ -5,7 +5,7 @@ A full-stack web app that analyzes facial images to detect acne severity (Clear,
 
 ---
 
-## 🧩 Project Overview
+##  Project Overview
 
 This project is a friendly AI-powered Skin Health Analyzer that helps you understand your acne severity from a simple facial photo. It combines smart deep learning technology with a smooth web experience built using Flask and PHP. After signing up and answering a quick skin quiz, you can upload or snap a picture of your face, and the AI will tell you whether your skin is Clear, Moderate, or Severely affected by acne  with a confidence score. Based on both your quiz answers and the AI’s prediction, it also gives you personalized tips to take better care of your skin.
 
@@ -21,7 +21,7 @@ In short, it’s like having a skin expert and a helpful assistant right in your
 
 ---
 
-## 🧠 Tech Stack
+##  Tech Stack
 
 | Layer         | Technology                       |
 |---------------|----------------------------------|
@@ -34,39 +34,122 @@ In short, it’s like having a skin expert and a helpful assistant right in your
 
 ---
 
-## 📂 Folder Structure
+##  Folder Structure
 
-<img width="389" height="684" alt="image" src="https://github.com/user-attachments/assets/59f8eba4-249c-40bb-a24b-f6c65ab9c4aa" />
-
----
-
-## 🚀 Setup Instructions
-
-### 1. Clone the Repository
-
-### 2. Run Flask Model API
-
-cd acne_detection_project
-pip install -r requirements.txt
-text
-Flask API will run at: [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
-
-### 3. Setup PHP Frontend
-
-- Move the `skin_analyzer` folder to your XAMPP `htdocs` directory:
-
-C:\xampp\htdocs\skin_analyzer
-
-text
-
-- Start Apache and MySQL in XAMPP.
+<img width="368" height="686" alt="image" src="https://github.com/user-attachments/assets/ebbba444-8bfc-4d88-ad84-ac2c7c0002b8" />
 
 
 ---
+## 🧱 Step-by-Step Model Creation Process
 
-## 🤖 Model Explanation
+### Step 1️ — Data Collection
+- Collected a dataset of acne images representing 3 categories:
+  - `Clear`
+  - `Moderate`
+  - `Severe`
+- Images are resized and normalized for consistent input to the CNN model.
 
-**AI Pipeline:**
+---
+
+### Step 2️ — Data Preprocessing  
+**File:** `data_preprocessing.py`
+Tasks handled:
+- Image normalization (pixel values scaled 0–1)
+- Resizing to (224x224)
+- Train/Test split (80:20)
+- Augmentation (rotation, flip, zoom)
+text
+
+---
+
+### Step 3️ — Model Building  
+**File:** `model_building.py`
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+
+Model Architecture (CNN)
+model = Sequential([
+Conv2D(32, (3,3), activation='relu', input_shape=(224,224,3)),
+MaxPooling2D(2,2),
+Conv2D(64, (3,3), activation='relu'),
+MaxPooling2D(2,2),
+Flatten(),
+Dense(128, activation='relu'),
+Dense(3, activation='softmax') # 3 classes: Clear, Moderate, Severe
+])
+
+---
+
+### Step 4️ — Model Training  
+**File:** `train_model.py`
+
+✅ Output: `acne_detection_model.h5` — your trained Deep Learning model.
+
+---
+
+### Step 5️ — Model Evaluation  
+**File:** `evaluate_model.py`
+loss, acc = model.evaluate(test_data)
+print(f"Accuracy: {acc*100:.2f}%")
+
+---
+
+### Step 6️ — Model Deployment via Flask  
+**File:** `flask_model_api.py`
+
+✅ Flask runs at: [http://127.0.0.1:5000/predict](http://127.0.0.1:5000/predict)
+
+---
+
+## 🌐 Web Frontend – Skin Analyzer WebApp
+
+Handles user interaction, quiz input, image capture/upload, and displaying results.
+
+### Folder Structure (WebApp)
+
+<img width="657" height="336" alt="image" src="https://github.com/user-attachments/assets/8c0f7d01-617a-4f5d-8fff-8ad0baeba3b9" />
+
+---
+
+### Frontend Workflow
+
+#### Step 1️ — User Login / Registration  
+- PHP connects to MySQL (`users4` table) for user authentication via `db.php`.
+
+#### Step 2️ — Skin Health Quiz  
+- `quiz.html` contains 5 questions about skin type, sleep, hydration, etc.  
+- On submit, quiz answers are saved to browser storage:
+localStorage.setItem("quiz_answers", JSON.stringify(answers));
+
+text
+
+#### Step 3️ — Capture or Upload Image  
+- `camera.html` lets users:
+  - Capture image via webcam (`getUserMedia()` API)  
+  - Or upload image manually  
+- Sends image + quiz JSON to `upload_and_predict.php`.
+
+#### Step 4️ — Backend Integration (PHP → Flask)  
+**File:** `upload_and_predict.php`
+$cfile = new CURLFile($_FILES['image']['tmp_name']);
+$post = ['image' => $cfile, 'quiz' => $_POST['quiz']];
+curl_setopt($curl, CURLOPT_URL, 'http://127.0.0.1:5000/predict');
+// Forward request to Flask API and return JSON response
+
+text
+
+#### Step 5️ — AI Result Display  
+**File:** `result.html`
+- Displays prediction and skincare improvement recommendations.
+
+#### Step 6️ — Recommendation System  
+**File:** `recommendation.html`  
+- Custom advice based on the model result:  
+  - Clear → Maintain routine  
+  - Moderate → Mild acne treatment  
+  - Severe → Dermatologist consultation
+
+##  Model Explanation
 
 1. **Data Collection**: Images categorized as Clear, Moderate, Severe.
 2. **Preprocessing**: Image resizing, normalization, augmentation.
@@ -77,7 +160,7 @@ text
 
 ---
 
-## 🌐 Frontend Workflow
+##  Frontend Workflow
 
 1. User authentication (login/registration)
 2. Skin health quiz for personal data
@@ -88,17 +171,18 @@ text
 
 ---
 
-## 💡 Future Enhancements
+##  Future Enhancements
 
-- Convert frontend to React.js for better responsiveness
-- Deploy Flask API to AWS Lambda or Render
-- Enhance CNN accuracy using a larger dataset
-- Store analysis history in MySQL
-- Add a voice-based AI skincare assistant
+- Build a more responsive and modern frontend using React.js for smoother user experience  
+- Deploy the Flask API on cloud platforms like AWS Lambda or Render for easy scalability and uptime  
+- Improve the acne detection accuracy by training the CNN model on a larger and more diverse dataset  
+- Add a feature to store users’ past skin analysis results in MySQL for tracking progress over time  
+- Explore adding a voice-based AI assistant to make skincare advice even more accessible and interactive  
+
 
 ---
 
-## contact details
+##  Contact details
 
 **Pitta Saiganesh**
 
@@ -107,8 +191,13 @@ text
 
 [LinkedIn](https://www.linkedin.com/in/sai-ganesh-s15092005) | [GitHub](https://github.com/saiganesh640) | [Email](mailto:saiganesh1901@gmail.com)
 
+---
+
+remaining 4 files/folders and datasets present in (acne detection project) folder is in my google drive , so i am sharing the drive link with you all  
+
+1. https://drive.google.com/drive/folders/10rG4bgMrSpjHQySrB2gb5MhUIdl_qRaa?usp=drive_link
+2. https://drive.google.com/drive/folders/1RWY_5Qpz9OyGiuXDSrRnJqyo34JmMgy7?usp=drive_link
+3. https://drive.google.com/drive/folders/1LXmoKj6qLhVXpPLRJEaja6BlQo2z8Cbc?usp=drive_link
+4. 
 
 
-## 📜 License
-
-You are free to use, modify, and distribute this project for educational or research purposes with appropriate credit.

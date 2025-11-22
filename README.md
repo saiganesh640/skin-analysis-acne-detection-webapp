@@ -213,4 +213,4 @@ remaining 4 files/folders and datasets present in (acne detection project) folde
 
 python flask_model_api.py
 
-
+localhost/skin_analyzer/register.php

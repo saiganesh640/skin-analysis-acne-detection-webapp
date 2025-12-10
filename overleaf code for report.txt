@@ -1,0 +1,1343 @@
+\documentclass[12pt,oneside,a4paper]{report}
+
+% -------------------------------------------------------------
+% ---------------------- PACKAGE SETTINGS ----------------------
+% -------------------------------------------------------------
+\usepackage[a4paper]{geometry}
+\geometry{
+    left=1.5in,
+    right=1.25in,
+    top=1in,
+    bottom=1in,
+    headsep=0.5in,
+    footskip=0.5in
+}
+
+\usepackage{setspace}
+\onehalfspacing   % 1.5 spacing
+
+\usepackage{times} % Times New Roman
+
+\usepackage{titlesec}
+%\usepackage{indentfirst}
+\setlength{\parindent}{0pt}  
+\setlength{\parskip}{6pt}    % 6 pts before/after paragraphs
+
+\usepackage{fancyhdr}
+\pagestyle{fancy} 
+\fancyhf{} 
+\fancyfoot[C]{\thepage}% Page number center bottom
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt} % remove footer line
+\usepackage{times} % Times New Roman
+
+\usepackage{titlesec}
+%\usepackage{indentfirst}
+\setlength{\parindent}{0pt}  
+\setlength{\parskip}{6pt}    % 6 pts before/after paragraphs
+
+% ---------------------- Heading Formats -----------------------
+\titleformat{\chapter}
+  {\normalfont\bfseries\centering\fontsize{16pt}{16pt}\selectfont}
+  {\thechapter}{1em}{\MakeUppercase}
+
+\titleformat{\section}
+  {\normalfont\bfseries\fontsize{14pt}{14pt}\selectfont}
+  {\thesection}{1em}{\MakeUppercase}
+
+\titleformat{\subsection}
+  {\normalfont\bfseries\fontsize{12pt}{12pt}\selectfont}
+  {\thesubsection}{1em}{}
+
+% -------------------------------------------------------------
+% ------------------ CAPTION SETTINGS -------------------------
+% -------------------------------------------------------------
+\usepackage{caption}
+\usepackage{graphicx}  
+\captionsetup[figure]{position=bottom}
+\captionsetup[table]{position=top}
+
+% -------------------------------------------------------------
+% ------------------------- DOCUMENT --------------------------
+% -------------------------------------------------------------
+\begin{document}
+
+% ----------------------- FRONT PAGE --------------------------
+\chapter*{front page}
+\pagenumbering{roman}
+\clearpage
+% ----------------------- CERTIFICATE PAGE ---------------------
+\chapter*{certificate page}
+\clearpage
+% ----------------------- ACKNOWLEDGEMENT ----------------------
+\chapter*{acknowledgement}
+\clearpage
+
+% ----------------------- ABSTRACT -----------------------------
+\chapter*{ABSTRACT}
+
+
+
+This study introduces a web tool designed to assess acne severity by ana- lyzing face photos, combining image analysis with machine learning in a practical framework. Its main aim is to give people an easy, quick method to check their skin status at home - without needing instant medical advice. Through patterns found in pictures, the platform delivers early feedback, supporting better tracking and per- sonal decisions about skincare routines. Central to its function is a deep learning model built specifically to detect and rate breakouts accurately.
+
+The model divides skin issues into three types - Clear, Moderate, or Severe depending on spots, swelling, surface shifts, yet other visual signs. The process moves through several steps: gathering data, adjusting images, applying transforma- tions to improve reliability, training the algorithm, also running strict checks for sta- ble results. A specialized server component uses Flask, serving as a bridge between the predictive system instead of the online front end. This REST-based interface manages file submissions, pre-processing tasks, plus delivers forecasts effectively.
+
+For the client side, PHP works together with HTML, CSS, besides JavaScript - to deliver a simple, clear, yet flexible design. Users sign up through the platform, then fill out a brief skin-health form before adding or taking a photo for process- ing. While registration details go into the system, information moves securely via the built-in MySQL setup. This approach keeps personal records protected without compromising consistency across interactions.
+The platform shows how machine learning can work well with current web tools to create an easy-to-use acne analysis app. While it’s not meant for medical use, it still offers useful feedback to help people better understand their skin. Its design makes future upgrades possible - like adding broader data or boosting how accurately it sorts skin types offering tailored advice for skin care while also looking into issues such as dark spots, healed wounds, or uneven surface patterns
+\newpage\textbf
+{Keywords: Web tool, Acne severity assessment, Face photo analysis, Image processing, Machine learning, Deep learning model, Skin classification (Clear, Moderate, Severe), Data collection, Image preprocessing, Image trans- formations, Model training, Model evaluation, Flask server, REST API, PHP, HTML, CSS, JavaScript, MySQL database, User registration, Secure data handling, Image upload, Breakout detection, Skincare tracking, Personalized skincare feedback, Dark spots detection, Uneven skin texture analysis, Healed wounds analysis, Skin-health form, Predictive system, Front-end and back-end integration}
+
+
+
+
+
+
+\clearpage
+
+% ----------------------- INDEX PAGE ---------------------------
+\tableofcontents
+\clearpage
+
+% -------------------------------------------------------------
+% ------------------------ MAIN CONTENT ------------------------
+% -------------------------------------------------------------
+
+
+% ------------------------ CHAPTER 1 ---------------------------
+\pagenumbering{arabic}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage} % page number at bottom center
+
+% --- Chapter opening page style ---
+\fancypagestyle{plain}{%
+    \fancyhf{} % clear header/footer
+    \fancyhead[R]{\fontsize{10}{12}\selectfont Chapter \thechapter} % top-right
+    \fancyfoot[C]{\thepage} % page number bottom center
+    \renewcommand{\headrulewidth}{0pt}
+    \renewcommand{\footrulewidth}{0pt}
+}
+
+
+
+\fancyfoot[C]{\thepage}% Page number center bottom
+
+
+
+    
+
+
+\chapter{INTRODUCTION}
+
+Acne ranks among the common skin disorders impacting people of various ages. Prompt evaluation of acne severity enables individuals to make choices regarding their skincare and decide if professional medical care is necessary. Nevertheless numerous individuals might lack access to dermatologists or might neglect the importance of timely examination. The increasing prevalence of technology and advancements, in image analysis have enabled the creation of helpful tools that provide preliminary skin evaluations in an easy and user-friendly way. This project investigates a method, via a web-based platform designed to analyze photographs and assess the intensity of acne.
+
+The main objective of this project is to develop an application of determining acne severity through image assessment aided by a machine learning algorithm. A Convolutional Neural Network (CNN) is trained to examine characteristics in facial photos and classify them into categories, like clear moderate or severe. To enable usage beyond the development setting the model is deployed via a Flask API that accepts images analyzes them and delivers predictions. Separating the model from the user interface guarantees operation and allows updates to be made without impacting the frontend. The system’s web application part is built with PHP, HTML, CSS and JavaScript. It offers functionalities like user registration, login filling out a basic skin-health questionnaire and the ability to upload or take facial photos, for evaluation. The questionnaire collects data on routines that might affect skin health allowing the system to provide more tailored advice alongside the prediction. The interface is crafted to be straightforward and flexible enabling users to engage with the system via a browser across devices.
+A MySQL database serves to keep user information, login credentials and quiz answers. This guarantees management of user data and enables organized retrieval whenever users engage with the system. The project’s modular design further facilitates maintenance and upgrades. Every part—the database, web interface and machine learning model—can be updated separately allowing adaptability for growth, like adding integrations additional skin conditions or deploying the system on cloud environments.
+
+In general this project illustrates the integration of machine learning methods and web technologies to enhance skincare awareness. Although the system is not designed to substitute medical diagnosis it serves as an initial evaluation tool that assists users in gaining better insight into their skin health. Providing responses based on image analysis and questionnaire data the system promotes well-informed choices and highlights the tangible advantages of technology in enhancing everyday health and wellness activities.
+
+\section{Technology Stack}
+
+    \subsection{Machine Learning and Model Development}
+\begin{itemize}
+    \item\textbf{ Python: } Chosen as the primary programming language for model development due to its extensive scientific computing support.
+    \item\textbf{ TensorFlow and Keras:}Used to build, train, and evaluate the Convolu- tional Neural Network (CNN) responsible for acne severity classification.
+    \item\textbf{ NumPy and Pillow:}Employed for image preprocessing, numerical calculations and modification of user-submitted images ahead of prediction.
+
+
+\end{itemize}
+
+\subsection{Backend Services}
+
+The platform employs backend technologies to facilitate model deployment and ensure seamless interaction, with the frontend.
+
+
+\begin{itemize}
+    \item \textbf{Flask:}Flask is utilized to serve the trained machine learning model as a REST API. Its minimalistic design allows transmission of image data and prediction outcomes.
+
+ 
+    \item \textbf{cURL and PHP Integration:}Interaction, between the PHP frontend and the Flask prediction service is managed through cURL enabling the application to obtain predictions.
+\end{itemize}
+
+\subsection{Frontend and User Interface}
+
+The user interface is developed with accepted web technologies to guarantee usability and adaptability.
+
+
+\begin{itemize}
+    \item \textbf{HTML5:} Specifies the framework of web pages such, as forms, image upload sections and output displays.
+
+    \item \textbf{CSS3:}Offers styling capabilities. Enhances the visual attractiveness and clarity of the application.
+
+.
+    \item \textbf{JavaScript:} Enables features including validating forms accessing the webcam and managing quiz information.
+
+    \item \textbf{PHP:}Manages user sessions processes form data and interacts with the machine learning API.
+\end{itemize}
+
+\subsection{Database Layer}
+
+Information is handled with dependable database systems.
+
+
+\begin{itemize}
+    \item \textbf{MySQL Database:} Stores user credentials, quiz responses, and optional prediction history.
+    \item \textbf{phpMyAdmin: }: Provides tools for managing tables, running queries, and monitoring stored data.
+\end{itemize}
+
+\subsection{Development and Testing Tools}
+
+Multiple instruments aid, in the creation and evaluation of the application.
+
+
+\begin{itemize}
+    \item \textbf{XAMPP Server:} Supplies a local environment with Apache and MySQL for testing.
+    \item \textbf{Visual Studio Code:} Serves as the main code editor.
+    \item \textbf{Postman / Browser Tools:} Used to test API behaviour and validate communication between components.
+    \item \textbf{Web Browsers (Chrome/Edge):} Used to test user interface performance and camera functionality.
+\end{itemize}
+
+
+\section{Purpose}
+
+The aim of this project can be grasped by considering the following points, which together clarify its drive, practical importance and technological relevance.
+
+1.To offer an convenient method, for assessing acne severity the system is created to assist users in obtaining a fast and straightforward comprehension of their facial condition.
+Skin issue via automated image evaluation. Allowing users to upload or take a photo and receive immediate feedback the app provides an easy approach for initial acne evaluation without the necessity for specialized tools or face-, to-face appointments.
+
+2.To employ machine learning, for skin assessment A primary aim of this project is to implement a trained Convolutional Neural Network (CNN) to analyze image characteristics and assess acne severity. This illustrates how machine learning can be successfully applied in health-related fields to provide objective evaluations grounded on visual cues.
+
+3.To integrate image analysis with user responses for pertinent feedback the system also seeks to enhance the assessments quality by merging the model’s prediction, with data gathered from a short skin health questionnaire. This method offers tailored insights and assists users in comprehending how their lifestyle or everyday routines might influence their skin condition.
+Learn how everyday choices influence your skin health.
+
+4.The goal is to build an integrated solution utilizing contemporary technologies. Another significant aim is to design an operational system that combines machine learning, web development, backend operations and database management. By integrating these elements into a functional application the project showcases effective full stack development and illustrates how various technologies can be coordinated to address real-world challenges.
+.
+
+
+
+
+\subsection{Project Scope}
+
+This section describes the goals of the Skin Analysis and Acne Detection Web Application well as the limits and essential elements incorporated in the system. Having a defined scope promotes concentrated development, practical planning and a clearer comprehension of the system’s aims.
+
+
+% ------------------ 1 --------------------
+\subsubsection{Automated Acne Severity Detection System}
+The project focuses on creating a machine learning model of examining facial photographs and categorizing acne severity. The key tasks involved include:
+
+
+
+
+\begin{itemize}
+    \item Building a dataset of labelled acne images.
+    \item Training a Convolutional Neural Network (CNN) to classify acne as \textit{Clear}, \textit{Moderate}, or \textit{Severe}.
+    \item Evaluating the model's performance and integrating the final version with the backend service.
+    \item Deploying the trained CNN model using a Flask API to enable real time predictions.
+\end{itemize}
+
+% ------------------ 2 --------------------
+\subsubsection{Web-Based User Interaction Platform}
+The project encompasses the creation of a easy-, to-use web platform. Essential features include:
+
+
+\begin{itemize}
+    \item Secure user registration and login modules.
+    \item A brief questionnaire, on skin health that gathers lifestyle details.
+    \item Choices, for users to either upload a picture or take one utilizing their device camera.
+    \itemA results section that shows acne severity, confidence levels and supportive comments.
+
+\end{itemize}
+
+% ------------------ 3 --------------------
+\subsubsection{Integration of Machine Learning, Backend Logic, and Database Support}
+The system combines elements to operate as a single application. This encompasses:
+
+
+\begin{itemize}
+    \item Communication between the PHP frontend and Flask API for image preprocessing and prediction.
+    \item Handling form submissions and managing application flow using PHP.
+    \item Storing user credentials, quiz answers, and optional prediction history in a MySQL database.
+    \item Ensuring secure and structured processing of data throughout the system.
+\end{itemize}
+
+% ------------------ 4 --------------------
+\subsubsection{Flexible Image Input Options}
+The application enables users to submit images through methods. It accommodates:
+
+
+\begin{itemize}
+    \item Uploading existing image files from the device.
+    \item Capturing real time facial images using the device camera.
+    \item Compatibility with various devices and browsers.
+    \item Validation of image format and quality before processing.
+\end{itemize}
+
+% ------------------ 5 --------------------
+\subsubsection{Personalised Recommendation Generation}
+
+The system produces customized suggestions derived from user data and model forecasts:
+
+
+\begin{itemize}
+    \item Combining quiz responses with acne severity results to create tailored suggestions.
+    \item Providing general skincare guidance relevant to the user’s condition.
+    \item Presenting feedback in a clear, user-friendly format.
+    \item Encouraging healthy skincare habits.
+\end{itemize}
+
+% ------------------ 6 --------------------
+\subsubsection{Functioning as an Informational, Non-Diagnostic Tool}
+The project’s scope distinctly outlines its objectives and boundaries. The system:
+
+
+\begin{itemize}
+    \item Acts as an initial self assessment platform for users.
+    \item Does not replace professional dermatological consultation.
+    \item Provides indicative results intended for awareness only.
+    \item Encourages users to seek medical advice for serious concerns.
+\end{itemize}
+
+
+
+
+
+\subsection{Product Features}
+
+The Skin Analysis and Acne Detection Web Application provides interactive and smart functionalities that improve user engagement facilitate automated skin evaluation and deliver customized recommendations. The primary features incorporated in the system are outlined below.
+
+
+% ------------------ 1 --------------------
+\subsubsection{User Registration and Login}
+The application features a protected user account component that handles authentication and customized access. Its main roles are:
+
+
+\begin{itemize}
+    \item Secure user registration and login handling.
+    \item Encrypted password storage to protect user privacy.
+    \item Access control to ensure only authorised users can view personalised information.
+\end{itemize}
+
+% ------------------ 2 --------------------
+\subsubsection{Skin-Health Questionnaire}
+A systematic questionnaire is offered to gather information concerning the user’s lifestyle and skincare practices. It facilitates:
+
+\begin{itemize}
+    \item A set of organised questions related to skin behaviour and routine.
+    \item Collection of user-specific data for personalised recommendations.
+    \item Integration of quiz responses with the recommendation system.
+\end{itemize}
+
+% ------------------ 3 --------------------
+\subsubsection{Image Upload and Camera Capture}
+The system enables users to upload pictures via two easy options::
+
+\begin{itemize}
+    \item Uploading an existing image from their device.
+    \item Capturing a live photo using the device’s camera.
+    \item Basic validation of image type and quality before it is processed.
+\end{itemize}
+
+% ------------------ 4 --------------------
+\subsubsection{Automated Acne Severity Detection}
+A pretrained CNN model evaluates the input image. Forecasts the severity of acne.
+The system provides:
+
+
+
+\begin{itemize}
+    \item Classification of acne into \textit{Clear}, \textit{Moderate}, and \textit{Severe}.
+    \item Real-time inference using a Flask API.
+    \item Confidence scores that reflect prediction reliability.
+\end{itemize}
+
+% ------------------ 5 --------------------
+\subsubsection{Personalised Skincare Recommendations}
+The system produces valuable skincare recommendations by integrating various data sources:
+
+
+\begin{itemize}
+    \item Integration of quiz responses with acne severity results.
+    \item Delivery of clear, practical skincare advice.
+    \item Assistance for users in understanding factors affecting their skin.
+\end{itemize}
+
+% ------------------ 6 --------------------
+\subsubsection{User-Friendly and Responsive Interface}
+To guarantee user-friendly engagement the platform offers:
+
+
+\begin{itemize}
+    \item A clean and intuitive layout for easy navigation.
+    \item A guided workflow from quiz to image submission and results.
+    \item Responsiveness across multiple devices and screen sizes.
+\end{itemize}
+
+% ------------------ 7 --------------------
+\subsubsection{Backend Integration and Database Management}
+The system incorporates backend technologies to manage data and requests efficiently:
+
+
+\begin{itemize}
+    \item PHP based backend for processing user requests and communicating with the API.
+    \item MySQL database for secure storage of user details and quiz responses.
+    \item Structured and protected management of application data.
+\end{itemize}
+
+
+
+\clearpage
+
+% ------------------------ CHAPTER 2 ---------------------------
+\chapter{WORKS DONE IN THE RELATED AREA}
+
+1. Dermatologist-Level Skin Condition Classification Using Deep Learning (2017)
+
+Using deep convolutional networks, they showed high accuracy in diagnosing skin issues - on par with doctors. The system learned from many real-world images, proving capable at spotting irregularities. Because of this, similar models may now support tools designed to detect acne.
+
+2. Automated Acne Severity Grading with CNN Models (2018)
+
+Jones et al. created an early machine-learning system for evaluating acne severity. Instead of standard approaches, they trained CNNs to classify breakouts by seriousness using labeled face photos. Rather than relying on human scoring, their method showed algorithms could achieve better accuracy. This backs up the current project’s approach.
+
+3. Smartphone Based Skin Image Analysis for Dermatology Applications (2020)
+
+What They Did: Back in 2020, Fathy and team checked if regular phone photos work for spotting skin problems. Instead of lab tools, they tested everyday devices on acne and discoloration. After cleaning up the images, results turned out reliable. Because of this, online photo submission became realistic - now a core part of our setup.
+
+4. Deep Learning Frameworks for Acne Severity Classification (2019)
+
+Researchers tested deep learning setups in 2019; they used convolutional layers along with modern feature detection tools to boost acne grading precision. Outcomes indicated a clear edge in detecting acne stages over prior ML approaches. That supports the use of CNN-driven systems in skin assessment.
+
+5. AI Based Dermatology Assistance Tools for Public Use (2021)
+
+Google Health launched a tool using AI to check skin issues through photos shared by users. This move supports the current project’s aims quite well.
+
+
+edit
+keyboard_arrow_down
+
+
+
+
+\clearpage
+
+% ------------------------ CHAPTER 3 ---------------------------
+\chapter{SYSTEM ANALYSIS}
+    The system review of the Skin Analysis and Acne Detection Web App outlines its setup, expected outputs, also underlying logic. This section forms the tech foundation for building a tool able to judge acne levels using uploaded photos, alongside user entries and forecasts - delivering clear responses via a simple online platform. The evaluation ensures the solution works smoothly at larger sizes, stays responsive, handles visuals quickly, plus gives trustworthy outcomes.
+\section{System overview}
+\subsection{Objective}
+In this study, we introduce a web tool that detects acne by processing face photos through a trained CNN. Instead of just classifying breakouts into Clear, Moderate, or Severe categories, it combines those outcomes with responses from a skin health survey to deliver tailored tips on avoiding flare ups. Rather than relying on complex setups, the approach focuses on simplicity  offering an easy-to-use online solution designed for everyday individuals checking their skin condition. While maintaining accuracy, the platform emphasizes accessibility so most people can assess concerns without expert help.
+\subsection{Scope}
+The app supports complete workflows from image capture or upload to preprocessing, then moves to predictions via a Flask API, includes database interaction, secure login, followed by personalized suggestions. It operates across multiple input methods, enabling seamless entry and fast handling. Designed to run directly on everyday devices like laptops, desktops, or smartphones without extra setup.
+\section{Requirements Analysis}
+
+\subsection{Functional Requirements}
+
+\subsubsection{User Registration and Login}
+The system lets people sign up plus log in safely. Stored passwords use encryption while every session runs separately. Once verified, individuals reach tools like forms, photo submission or taking pics, also outcome screens.
+
+\subsubsection{Skin-Health Questionnaire}
+The application includes a short questionnaire covering skincare routines and lifestyle habits. User responses are stored and used to personalise recommendation results.
+
+\subsubsection{Image Input and Preprocessing}
+Users can provide facial images through:
+\begin{itemize}
+    \item Uploading a JPEG or PNG image
+    \item Capturing a live photo using their device camera
+\end{itemize}
+
+Before prediction, the following preprocessing steps are applied:
+\begin{itemize}
+    \item Image resizing
+    \item Normalisation
+    \item RGB channel formatting
+    \item Validation of file type and image quality
+\end{itemize}
+
+\subsubsection{Acne Severity Prediction}
+The system categorises acne severity into three levels: Clear, Moderate, and Severe. A CNN model performs this classification and returns both the prediction and a confidence score through the Flask backend.
+
+\subsubsection{Recommendation Generation}
+Recommendations are generated by combining the model prediction with the user’s quiz responses. These personalised suggestions help users understand factors that may influence their skin condition.
+
+\subsubsection{Web Interface and Navigation}
+The application is divided into user friendly pages:
+\begin{itemize}
+    \item Login Page
+    \item Quiz Page
+    \item Camera/Upload Page
+    \item Prediction and Recommendation Page
+\end{itemize}
+
+The interface is implemented using PHP, HTML, CSS, and JavaScript to ensure smooth navigation and meaningful user feedback.
+
+\subsection{Non-Functional Requirements}
+
+\subsubsection{Security}
+\begin{itemize}
+    \item Passwords are stored using secure hashing techniques.
+    \item All user inputs and uploaded files undergo validation.
+    \item Prepared statements are used to prevent SQL injection attacks.
+\end{itemize}
+
+\subsubsection{Performance}
+\begin{itemize}
+    \item Predictions are generated within 2 to 5 seconds.
+    \item PHP and Flask communicate efficiently for real time results.
+\end{itemize}
+
+\subsubsection{Scalability}
+\begin{itemize}
+    \item The backend can support updated or retrained models.
+    \item The database can accommodate additional user metrics.
+    \item Preprocessing can be extended for larger datasets.
+\end{itemize}
+
+\subsubsection{Reliability}
+\begin{itemize}
+    \item Prediction results remain stable under normal operation.
+    \item Navigation across pages is smooth and consistent.
+    \item File validation reduces the probability of crashes.
+\end{itemize}
+
+\subsubsection{Mobile Responsiveness}
+\begin{itemize}
+    \item Interface adapts to mobile and tablet screens.
+    \item Camera capture works on supported browsers.
+\end{itemize}
+
+% ----------------------------------------------------
+
+\section{System Design}
+
+\subsection{Architecture}
+
+\textbf{Frontend}
+\begin{itemize}
+    \item Built using PHP, HTML, CSS and JavaScript.
+    \item Manages user authentication, quiz, image upload and results.
+    \item Offers clean and simple navigation.
+\end{itemize}
+
+\textbf{Backend}
+\begin{itemize}
+    \item Python-based Flask REST API.
+    \item Handles image preprocessing and predictions.
+    \item Communicates using JSON responses.
+\end{itemize}
+
+\textbf{Deep Learning Model}
+\begin{itemize}
+    \item CNN trained on acne image dataset.
+    \item Classifies severity and returns confidence.
+    \item Ensures consistent preprocessing.
+\end{itemize}
+
+% ----------------------------------------------------
+
+\subsection{Data Storage}
+
+\textbf{Database (MySQL)}
+\begin{itemize}
+    \item Stores user credentials.
+    \item Stores quiz responses.
+    \item Stores optional prediction history.
+\end{itemize}
+
+\textbf{Model and Scripts}
+\begin{itemize}
+    \item CNN model stored in model directory.
+    \item Preprocessing and API scripts stored in project folder.
+    \item Images are not stored unless configured.
+\end{itemize}
+
+% ----------------------------------------------------
+
+\subsection{Security Measures}
+\begin{itemize}
+    \item Validates uploaded image files.
+    \item Sanitizes user form data.
+    \item Does not store raw images by default.
+    \item Keeps frontend and backend logically separate.
+\end{itemize}
+
+% ----------------------------------------------------
+
+\section{Workflow Analysis}
+
+\subsection{User Workflow}
+\begin{enumerate}
+    \item User opens application.
+    \item Performs registration or login.
+    \item Completes questionnaire.
+    \item Uploads or captures image.
+    \item Image is processed and sent to API.
+    \item Prediction and confidence returned.
+    \item Recommendations displayed.
+\end{enumerate}
+
+\subsection{Admin Workflow}
+\begin{enumerate}
+    \item Prepare dataset.
+    \item Train model.
+    \item Evaluate and tune accuracy.
+    \item Deploy API.
+    \item Manage database.
+    \item Maintain code.
+\end{enumerate}
+
+% ----------------------------------------------------
+
+
+
+\section{Hardware Requirements}
+\subsection{Client-Side}
+\begin{itemize}
+    \item Minimum: Dual core CPU, 4 GB RAM.
+    \item Recommended: Quad core CPU, 8 GB RAM.
+\end{itemize}
+
+\subsection{Server / Training}
+\begin{itemize}
+    \item CPU: Intel i5/i7 or equivalent.
+    \item RAM: 16 GB recommended.
+    \item GPU: Optional.
+    \item Storage: 20 GB SSD minimum.
+\end{itemize}
+
+
+\section{Software Requirements}
+\subsection{Frontend}
+\begin{itemize}
+    \item PHP
+    \item HTML5
+    \item CSS3
+    \item JavaScript
+\end{itemize}
+
+\subsection{Backend}
+\begin{itemize}
+    \item Python 3.x
+    \item Flask
+    \item TensorFlow / Keras
+    \item NumPy, Pillow
+\end{itemize}
+
+\subsection{Database}
+\begin{itemize}
+    \item MySQL
+    \item phpMyAdmin
+\end{itemize}
+
+\subsection{Development Tools}
+\begin{itemize}
+    \item VS Code
+    \item Jupyter Notebook
+    \item Git / GitHub
+    \item Virtual Environment
+\end{itemize}
+
+\clearpage
+
+% ------------------------ CHAPTER 4 ---------------------------
+\chapter{System Design and Specification}
+
+System Design and Specification describes the structural blueprint and
+operational workflow of the Skin Analysis and Acne Detection Web Applica-
+The setup is described using High-Level Design (HLD), showing structure while leaving details aside
+outlines the general structure; meanwhile, Low-Level Design (LLD) clarifies internal components
+eternal reasoning along with operational stages.
+
+
+The project uses a flexible structure where every part works separately; each piece handles its own task efficiently while connecting smoothly with others through clear interfaces that ensure stability across systems
+a specific role - improving flexibility, ease of updates, also readability in
+development.
+
+\begin{itemize}
+    \item \textbf{Frontend (PHP, HTML, CSS, JavaScript)} \\
+    Handles user registration, login, quiz submission, image upload/capture, and result display.
+    
+    \item \textbf{Backend (Flask API Python)} \\
+    Performs image preprocessing, loads the CNN model, and returns predictions.
+    
+    \item \textbf{Machine Learning Model (CNN)} \\
+    Trained to classify acne into Clear, Moderate, or Severe categories.
+    
+    \item \textbf{Database (MySQL)} \\
+    Stores user credentials, quiz responses, and optional history.
+\end{itemize}
+
+% --------------------------------------------------------
+
+\section{High Level Design (HLD)}
+
+The system follows a three-tier architecture consisting of the Presentation Layer, Application Layer, and Data Layer.
+
+\subsubsection{1. Presentation Layer (Frontend)}
+\begin{itemize}
+    \item Technologies: PHP, HTML, CSS, JavaScript
+    \item Components:
+        \begin{itemize}
+            \item User Interface
+            \item Image Capture / Upload Module
+            \item Quiz Interface
+            \item Results Display
+        \end{itemize}
+    \item Responsibilities:
+        \begin{itemize}
+            \item Manage user interaction
+            \item Present data
+            \item Perform client-side validation
+        \end{itemize}
+\end{itemize}
+
+% --------------------------------------------------------
+
+\subsubsection{2. Application Layer (Backend)}
+\begin{itemize}
+    \item Technologies: Flask REST API (Python)
+    \item Components:
+        \begin{itemize}
+            \item API Gateway
+            \item Image Processing Service
+            \item Prediction Engine
+        \end{itemize}
+    \item Responsibilities:
+        \begin{itemize}
+            \item Handle user requests
+            \item Preprocess images
+            \item Perform model inference
+        \end{itemize}
+\end{itemize}
+
+% --------------------------------------------------------
+
+\subsubsection{3. Data Layer (Database)}
+\begin{itemize}
+    \item Technologies: MySQL, phpMyAdmin
+    \item Components:
+        \begin{itemize}
+            \item User Database
+            \item Quiz Response Storage
+        \end{itemize}
+    \item Responsibilities:
+        \begin{itemize}
+            \item Persist data
+            \item Authentication
+            \item Retrieve historical information
+        \end{itemize}
+\end{itemize}
+
+% --------------------------------------------------------
+
+\subsection{Machine Learning Module}
+
+\begin{itemize}
+    \item Technologies: TensorFlow, Keras, CNN
+    \item Components:
+        \begin{itemize}
+            \item Pre-trained Model
+            \item Image Preprocessor
+        \end{itemize}
+    \item Responsibilities:
+        \begin{itemize}
+            \item Predict acne severity
+            \item Produce confidence scores
+        \end{itemize}
+\end{itemize}
+
+
+
+\subsection{Flow Chart}
+\begin{figure}[h]
+    \centering
+\includegraphics[width=0.65\textwidth]{unnamed.jpg}
+
+    \caption{System Workflow Diagram}
+    \label{fig:workflow}
+\end{figure}
+
+
+
+
+\clearpage
+
+\subsection{E-R Diagram}
+\begin{figure}[h]
+    \centering
+\includegraphics[width=1.0\textwidth]{unnamed12.jpg}
+
+    \caption{System Workflow Diagram}
+    \label{fig:workflow}
+\end{figure}
+\clearpage
+
+\section{Low Level Design (LLD)}
+
+Low-Level Design shows how every part inside the Skin Analysis and Acne Detection System actually works. While covering data movement, it also outlines checks that ensure accuracy across processes. Instead of just defining functions, it details steps turning raw input into clear acne severity ratings. Because precision matters, personalized suggestions emerge through structured logic and verified outputs.
+
+\subsection{Process Specification}
+
+Process Specification outlines the inputs, validation steps, internal actions, and outputs of each major process in the system.
+
+% ------------------------------------------------------
+
+\subsubsection{1. User Registration Process}
+
+\textbf{Input:}
+\begin{itemize}
+    \item Full name, email, username, password
+\end{itemize}
+
+\textbf{Validation:}
+\begin{itemize}
+    \item All fields must be non-empty.
+    \item Email must be valid.
+    \item Password must meet minimum length.
+    \item Email and username must be unique.
+\end{itemize}
+
+\textbf{Internal Actions:}
+\begin{itemize}
+    \item Sanitize input
+    \item Check database for duplicates
+    \item Hash password using BCRYPT
+    \item Insert new user record
+\end{itemize}
+
+\textbf{Output:}
+\begin{itemize}
+    \item Success message or error message
+\end{itemize}
+
+% ------------------------------------------------------
+
+\subsubsection{2. Quiz Submission Process}
+
+\textbf{Input:} User quiz responses
+
+\textbf{Validation:}
+\begin{itemize}
+    \item All required questions must be answered
+\end{itemize}
+
+\textbf{Internal Actions:}
+\begin{itemize}
+    \item Serialize responses to JSON
+    \item Store responses in database
+\end{itemize}
+
+\textbf{Output:}
+\begin{itemize}
+    \item quiz\_id for analysis
+\end{itemize}
+
+% ------------------------------------------------------
+
+\subsubsection{3. Image Upload \& Forwarding Process}
+
+\textbf{Input:} Image file
+
+\textbf{Validation:}
+\begin{itemize}
+    \item Accept only JPEG/PNG
+    \item Check file size and integrity
+\end{itemize}
+
+\textbf{Internal Actions:}
+\begin{itemize}
+    \item Save temporarily
+    \item Forward to Flask prediction API
+\end{itemize}
+
+\textbf{Output:}
+\begin{itemize}
+    \item JSON prediction result
+\end{itemize}
+
+% ------------------------------------------------------
+
+\subsubsection{4. Flask Prediction Process}
+
+\textbf{Input:} Multipart image request
+
+\textbf{Validation:}
+\begin{itemize}
+    \item Confirm image exists
+    \item Convert to RGB
+\end{itemize}
+
+\textbf{Internal Actions:}
+\begin{itemize}
+    \item Preprocess image
+    \item Run CNN model
+    \item Compute prediction and confidence
+\end{itemize}
+
+\textbf{Output:}
+\begin{itemize}
+    \item \{severity, confidence\}
+\end{itemize}
+
+% ------------------------------------------------------
+
+\subsubsection{5. Result Presentation \& Recommendation}
+
+\textbf{Input:} Prediction + quiz responses
+
+\textbf{Internal Actions:}
+\begin{itemize}
+    \item Combine data
+    \item Generate personalised recommendations
+\end{itemize}
+
+\textbf{Output:}
+\begin{itemize}
+    \item Result page displaying analysis and advice
+\end{itemize}
+
+% ------------------------------------------------------
+
+\subsection{Why it is Used}
+
+\begin{itemize}
+    \item Offers first-step acne analysis through artificial intelligence
+    \item Assists people in recognizing their skin issues
+    \item Provides custom skin care tips based on your needs
+    \item Available via an easy-to-use website
+    \item Promotes better routines for skin care
+    \item  Demonstrates practical ML application
+\end{itemize}
+
+\clearpage
+
+
+\subsection{Pseudo-Code}
+
+
+\begin{flushleft}\normalsize
+// User Registration Process\\
+FUNCTION RegisterUser(fullname, email, username, password):\\
+fullname ← TRIM(fullname)\\
+email    ← TRIM(email)\\
+username ← TRIM(username)\\
+IF fullname = "" OR email = "" OR username = "" OR password = "":\\
+RETURN "Error: All fields required"\\
+IF NOT VALID\_EMAIL(email):\\
+RETURN "Error: Invalid email format"\\
+record ← QUERY("SELECT id FROM users WHERE email=? OR username=?", email, username)\\
+IF record EXISTS:\\
+RETURN "Error: Email or Username already exists"\\
+hashed ← HASH(password)\\
+status ← EXECUTE("INSERT INTO users(fullname,email,username,password) VALUES(?,?,?,?)", fullname, email, username, hashed)\\
+IF status = SUCCESS:\\
+RETURN "Registration Successful"\\
+ELSE:\\
+RETURN "Registration Failed"\\[1em]
+
+// User Login Process\\
+FUNCTION LoginUser(loginId, password):\\
+loginId ← TRIM(loginId)\\
+IF loginId = "" OR password = "":\\
+RETURN "Error: Credentials Required"\\
+user ← QUERY("SELECT id,password FROM users WHERE email=? OR username=?", loginId, loginId)\\
+IF NOT user:\\
+RETURN "Error: User Not Found"\\
+IF NOT VERIFY(password, user.password):\\
+RETURN "Error: Incorrect Password"\\
+SET\_SESSION("user\_id", user.id)\\
+RETURN "Login Successful"\\[1em]
+
+// Quiz Saving Process\\
+FUNCTION SaveQuiz(user\_id, answers):\\
+IF user\_id = NULL OR answers EMPTY:\\
+RETURN "Error: Missing Quiz Data"\\
+jsonData ← JSON\_ENCODE(answers)\\
+status ← EXECUTE("INSERT INTO QuizResponse(user\_id,answers\_json,submitted\_at) VALUES(?,?,NOW())", user\_id, jsonData)\\
+IF status = SUCCESS:\\
+quiz\_id ← LAST\_INSERT\_ID()\\
+RETURN quiz\_id\\
+ELSE:\\
+RETURN "Error: Quiz Save Failed"\\[1em]
+
+// Image Upload and Prediction Process\\
+FUNCTION UploadAndPredict(user\_id, quiz\_id, imageFile):\\
+IF imageFile NOT PROVIDED:\\
+RETURN "Error: No Image"\\
+IF imageFile.type NOT IN ["image/jpeg","image/png"]:\\
+RETURN "Error: Invalid Image Format"\\
+tempPath ← SAVE\_TEMP(imageFile)\\
+response ← SEND\_TO\_FLASK("/predict", tempPath)\\
+DELETE\_FILE(tempPath)\\
+IF response.status != 200:\\
+RETURN "Error: Prediction Failed"\\
+severity   ← response.severity\\
+confidence ← response.confidence\\
+IF user\_id NOT NULL:\\
+EXECUTE("INSERT INTO AnalysisRecord(user\_id,quiz\_id,severity,confidence,created\_at) VALUES(?,?,?,?,NOW())", user\_id, quiz\_id, severity, confidence)\\
+RETURN \{severity, confidence\}\\[1em]
+
+// Flask Prediction Endpoint\\
+ROUTE POST /predict:\\
+IF "image" NOT IN REQUEST:\\
+RETURN ERROR("Image Missing")\\
+TRY:\\
+img ← OPEN\_IMAGE(request.image).CONVERT("RGB")\\
+x   ← PreprocessImage(img)\\
+p   ← MODEL.PREDICT(x)\\
+idx ← ARGMAX(p)\\
+label ← CLASS\_NAMES[idx]\\
+conf  ← MAX(p) * 100\\
+RETURN \{severity:label, confidence:conf\}\\
+CATCH:\\
+RETURN ERROR("Processing Failed")\\[1em]
+
+// Image Preprocessing\\
+FUNCTION PreprocessImage(image):\\
+resized ← RESIZE(image, 224, 224)\\
+arr ← NORMALIZE(resized)\\
+IF arr HAS 4 CHANNELS:\\
+arr ← REMOVE\_ALPHA(arr)\\
+arr ← ADD\_BATCH\_DIM(arr)\\
+RETURN arr\\[1em]
+
+// Recommendation Generation\\
+FUNCTION GenerateRecommendations(severity, answers):\\
+recs ← EMPTY\_LIST()\\
+IF severity = "Severe":\\
+ADD(recs, "Consult a dermatologist")\\
+ADD(recs, "Avoid squeezing pimples")\\
+ADD(recs, "Use prescribed treatments")\\
+IF severity = "Moderate":\\
+ADD(recs, "Use gentle cleanser")\\
+ADD(recs, "Avoid heavy cosmetics")\\
+IF severity = "Clear":\\
+ADD(recs, "Maintain routine")\\
+ADD(recs, "Use sunscreen")\\
+IF answers.water = "low":\\
+ADD(recs, "Increase water intake")\\
+IF answers.sleep = "low":\\
+ADD(recs, "Improve sleep duration")\\
+IF answers.stress = "high":\\
+ADD(recs, "Reduce stress")\\
+RETURN FIRST 5 ITEMS(recs)\\[1em]
+
+// Camera Capture and UI Display\\
+FUNCTION CaptureAndSend():\\
+stream ← OPEN\_CAMERA()\\
+DISPLAY(stream)\\
+frame ← CAPTURE\_FRAME()\\
+blob ← CONVERT\_TO\_IMAGE(frame)\\
+result ← UploadAndPredict(current\_user\_id, current\_quiz\_id, blob)\\
+recs ← GenerateRecommendations(result.severity, current\_answers)\\
+DISPLAY\_RESULT(result, recs)\\[1em]
+
+// Main System Flow\\
+FUNCTION MainFlow():\\
+IF NOT LOGGED\_IN():\\
+SHOW\_LOGIN()\\
+ELSE:\\
+SHOW\_DASHBOARD()\\
+START\_QUIZ → SHOW\_QUIZ()\\
+SUBMIT\_QUIZ → quiz\_id ← SaveQuiz(user\_id, answers)\\
+GO\_TO\_CAMERA()\\
+CAPTURE\_IMAGE → CaptureAndSend()\\
+SHOW\_RESULTS()
+
+
+\end{flushleft}
+
+\clearpage
+\subsection{Screenshot Diagram}
+
+\begin{figure}[!ht]
+    \centering
+    
+    \includegraphics[width=0.80\textwidth]{screenshots acne/ss1.png}
+    \vspace{0.8cm}
+    
+    \includegraphics[width=0.80\textwidth]{screenshots acne/ss2.png}
+    \vspace{0.8cm}
+    
+    \includegraphics[width=0.80\textwidth]{screenshots acne/ss3.png}
+
+\end{figure}
+
+\clearpage
+
+\begin{figure}[h]
+    \centering
+    
+    \includegraphics[width=0.80\textwidth]{screenshots acne/ss4.png}
+    \vspace{0.8cm}
+    
+    \includegraphics[width=0.80\textwidth]{screenshots acne/ss5.png}
+    \vspace{0.8cm}
+    
+    \includegraphics[width=0.80\textwidth]{screenshots acne/ss6.png}
+  
+   
+\end{figure}
+\clearpage
+\begin{figure}[h]
+\centering
+    \includegraphics[width=0.80\textwidth]{screenshots acne/ss7.png}   
+\end{figure}
+
+
+% ------------------------ CHAPTER 5 ---------------------------
+\chapter{CODING}
+
+\begin{flushleft}\normalsize
+
+// db.php\\
+\$host = "localhost";\\
+\$user = "root";\\
+\$pass = "";\\
+\$db   = "quiz\_app";\\
+\$port = 3306;\\
+\$mysqli = new mysqli(\$host, \$user, \$pass, \$db, \$port);\\
+IF \$mysqli→connect\_errno:\\
+\hspace{1em} die("Database connection failed");\\[1em]
+
+// register.php\\
+SESSION\_START()\\
+REQUIRE db.php\\
+IF REQUEST\_METHOD = POST:\\
+\hspace{1em} fullname = TRIM(\_POST['fullname'])\\
+\hspace{1em} email    = TRIM(\_POST['email'])\\
+\hspace{1em} username = TRIM(\_POST['username'])\\
+\hspace{1em} password = \_POST['password']\\
+\hspace{1em} IF any field empty: SET SESSION error → redirect\\
+\hspace{1em} IF email invalid: SET SESSION error → redirect\\
+\hspace{1em} stmt = PREPARE "SELECT id FROM users4 WHERE email=? OR username=?"\\
+\hspace{1em} IF record exists: SET SESSION error → redirect\\
+\hspace{1em} hash = HASH(password)\\
+\hspace{1em} INSERT fullname,email,username,password INTO users4\\
+\hspace{1em} IF success: redirect to index.php ELSE redirect back\\[1em]
+
+// login.php\\
+SESSION\_START()\\
+REQUIRE db.php\\
+IF POST REQUEST:\\
+\hspace{1em} username = TRIM(\_POST['username'])\\
+\hspace{1em} password = TRIM(\_POST['password'])\\
+\hspace{1em} stmt = PREPARE "SELECT id,password FROM users4 WHERE username=?"\\
+\hspace{1em} IF match AND password\_verify():\\
+\hspace{2em} SET SESSION user\_id → redirect to quiz.html\\
+\hspace{1em} ELSE SET error → redirect to login\\[1em]
+
+// save\_quiz.php\\
+SESSION\_START()\\
+REQUIRE db.php\\
+user\_id = SESSION['user\_id']\\
+answers\_json = POST['answers']\\
+IF invalid: RETURN JSON error\\
+INSERT user\_id, answers\_json INTO QuizResponse\\
+RETURN quiz\_id AS JSON\\[1em]
+
+// upload\_and\_predict.php\\
+IF no image uploaded: RETURN JSON error\\
+imageTmp = \_FILES['image']['tmp\_name']\\
+curlFile = CURLFile(imageTmp)\\
+POST image + quiz TO Flask API at /predict\\
+RETURN Flask response\\[1em]
+
+// flask\_model\_api.py\\
+model = LOAD "acne\_detection\_model.h5"\\
+CLASS\_NAMES = ["Clear","Moderate","Severe"]\\
+FUNCTION preprocess(img):\\
+\hspace{1em} img → RGB → resize(224×224)\\
+\hspace{1em} arr = normalize(img)\\
+\hspace{1em} RETURN batch\_dim(arr)\\
+ROUTE /predict POST:\\
+\hspace{1em} file = request.files['image']\\
+\hspace{1em} img = open file\\
+\hspace{1em} x = preprocess(img)\\
+\hspace{1em} preds = model.predict(x)\\
+\hspace{1em} idx = argmax(preds)\\
+\hspace{1em} label = CLASS\_NAMES[idx]\\
+\hspace{1em} confidence = preds[idx] * 100\\
+\hspace{1em} RETURN JSON severity, confidence\\[1em]
+
+
+
+// camera.html JavaScript\\
+captureBtn.onclick = FUNCTION():\\
+\hspace{1em} canvas = createCanvas(video.width, video.height)\\
+\hspace{1em} draw video frame\\
+\hspace{1em} blob = canvas.toBlob()\\
+\hspace{1em} fd.append("image", blob)\\
+\hspace{1em} fd.append("quiz", localStorage.quiz\_answers)\\
+\hspace{1em} SEND POST → upload\_and\_predict.php\\
+\hspace{1em} SAVE result to localStorage\\
+\hspace{1em} redirect to result.html\\[1em]
+
+// result.html JavaScript\\
+data = JSON.parse(localStorage.getItem("analysis\_result"))\\
+IF data.severity exists:\\
+\hspace{1em} SET document.severity = data.severity\\
+\hspace{1em} SET
+
+
+// trainmodel.py\\
+IMPORT tensorflow AS tf\\
+FROM tensorflow.keras.preprocessing.image IMPORT ImageDataGenerator\\
+FROM tensorflow.keras.applications IMPORT MobileNetV2\\
+FROM tensorflow.keras.layers IMPORT GlobalAveragePooling2D, Dense, Dropout\\
+FROM tensorflow.keras.models IMPORT Model\\
+FROM tensorflow.keras.optimizers IMPORT Adam\\[0.7em]
+
+
+train\_dir = 'split\_dataset/train'\\
+validation\_dir = 'split\_dataset/validation'\\
+IMG\_HEIGHT = 224\\
+IMG\_WIDTH = 224\\
+BATCH\_SIZE = 32\\[0.7em]
+
+
+train\_image\_generator = ImageDataGenerator(rescale=1./255, rotation\_range=40, width\_shift\_range=0.2, height\_shift\_range=0.2, shear\_range=0.2, zoom\_range=0.2, horizontal\_flip=True, fill\_mode='nearest')\\
+validation\_image\_generator = ImageDataGenerator(rescale=1./255)\\[0.7em]
+
+
+train\_data\_gen = train\_image\_generator.flow\_from\_directory(train\_dir, target\_size=(IMG\_HEIGHT, IMG\_WIDTH), batch\_size=BATCH\_SIZE, class\_mode='categorical')\\
+val\_data\_gen = validation\_image\_generator.flow\_from\_directory(validation\_dir, target\_size=(IMG\_HEIGHT, IMG\_WIDTH), batch\_size=BATCH\_SIZE, class\_mode='categorical')\\[0.7em]
+
+
+base\_model = MobileNetV2(input\_shape=(IMG\_HEIGHT, IMG\_WIDTH, 3), include\_top=False, weights='imagenet')\\
+base\_model.trainable = False\\[0.7em]
+
+
+x = base\_model.output\\
+x = GlobalAveragePooling2D()(x)\\
+x = Dense(1024, activation='relu')(x)\\
+x = Dropout(0.5)(x)\\
+predictions = Dense(train\_data\_gen.num\_classes, activation='softmax')(x)\\
+model = Model(inputs=base\_model.input, outputs=predictions)\\[0.7em]
+
+
+model.compile(optimizer=Adam(learning\_rate=0.0001), loss='categorical\_crossentropy', metrics=['accuracy'])\\[0.7em]
+
+
+NUM\_EPOCHS = 20\\
+history = model.fit(train\_data\_gen, epochs=NUM\_EPOCHS, validation\_data=val\_data\_gen, steps\_per\_epoch=train\_data\_gen.samples // BATCH\_SIZE, validation\_steps=val\_data\_gen.samples // BATCH\_SIZE)\\[0.7em]
+
+
+model.save('acne\_detection\_model.h5')\\[1em]
+
+
+// split.py\\
+IMPORT os, shutil, random\\[0.5em]
+
+FUNCTION split\_image\_dataset(source\_dir, dest\_dir, train\_split\_ratio = 0.8):\\
+\hspace{1em} train\_dir = JOIN(dest\_dir, 'train')\\
+\hspace{1em} validation\_dir = JOIN(dest\_dir, 'validation')\\
+\hspace{1em} MAKE train\_dir, validation\_dir\\[0.5em]
+
+\hspace{1em} FOR each class folder IN source\_dir:\\
+\hspace{2em} CREATE class folders IN train and validation\\
+\hspace{2em} all\_files = LIST of images\\
+\hspace{2em} SHUFFLE all\_files\\
+\hspace{2em} split\_index = LEN(all\_files) × train\_split\_ratio\\
+\hspace{2em} train\_files = first split\_index files\\
+\hspace{2em} validation\_files = remaining files\\[0.5em]
+
+\hspace{2em} FOR f IN train\_files: COPY to train/class\\
+\hspace{2em} FOR f IN validation\_files: COPY to validation/class\\[0.7em]
+
+source\_folder = 'dataset'\\
+destination\_folder = 'split\_dataset'\\
+CALL split\_image\_dataset(source\_folder, destination\_folder)\\
+
+\clearpage
+
+% ------------------------ CHAPTER 6 ---------------------------
+\chapter{TESTING}
+
+
+
+
+The system underwent testing one step at a time - so each function could operate correctly. While verifying features, checks were made in sequence; ensuring proper performance throughout the process.
+The aim of testing was checking stability; also evaluating precision while assessing how easy it is to use
+the Login System, Registration Module, Quiz Page, Result Page, and Camera
+Integration.
+
+During testing, different users tried registering with valid and invalid inputs.
+We examined the system’s response when a user inputs an incorrect password or
+tries signing up using an email that's taken. Likewise, testers tried the quiz
+so that questions appear properly while scoring works accurately
+The camera function got checked across several gadgets so it would start properly
+correctly once users grant access.
+
+\section{Testing Summary Table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|p{3.5cm}|p{5cm}|p{3cm}|p{3cm}|}
+\hline
+\textbf{Test Case} & \textbf{Description} & \textbf{Expected Result} & \textbf{Actual Result} \\ \hline
+
+Registration Validation & Test with valid and invalid data (duplicate email, empty fields) & Valid users register successfully & Working as expected \\ \hline
+
+Login Authentication & Enter correct and incorrect credentials & Only valid users log in & Working as expected \\ \hline
+
+Quiz Page Loading & Ensure questions load without errors & Questions should appear correctly & Working as expected \\ \hline
+
+Score Calculation & Test different answers to verify accuracy & Correct score calculation & Working as expected \\ \hline
+
+Camera Integration & Capture image during result page & Camera should activate with permission & Works on supported devices \\ \hline
+
+Database Connectivity & Insert, fetch, and store user data & All operations should run smoothly & Stable after fixes \\ \hline
+
+\end{tabular}
+\caption{System Testing Summary}
+\end{table}
+
+\clearpage
+
+% ------------------------ CHAPTER 7 ---------------------------
+\chapter{CONCLUSION AND LIMITATIONS}
+
+\section{Conclusion}
+
+The Skin Analysis tool uses web tech, machine learning, or image processing to help users check their skin easily. Instead of just one method, it pairs a deep-learning system with questionnaire results - offering early acne evaluation together with custom advice.
+The project demonstrates a full workflow - from logging users in, through collecting quiz answers, followed by live photo capture, then analyzing it instantly, finally showing outcomes right away.
+
+\section{Limitations}
+Even though it functions properly, some restrictions remain. However, the device
+Functionality might fail on outdated browsers or gadgets that lack support
+Access settings. Quiz items stay fixed, added by hand - this restricts flexibility
+The range of test situations - also, today’s safety steps
+for instance, turning passwords into codes is simple but could work better in live systems
+use.
+The design weighs little; it works well for minor tasks. 
+
+
+Yet major operations face limits
+Deployment could need expanded backend capacity - alongside database tuning - to handle increased demand efficiently
+structure.
+
+\clearpage
+
+% ------------------------ REFERENCES --------------------------
+\chapter{REFERENCES/BIBLIOGRAPHY}
+
+
+\section*{References}
+
+\begin{enumerate}
+    \item Apache Software Foundation. \textit{Apache HTTP Server Documentation}.
+    \item Bootstrap Team. \textit{Bootstrap CSS Framework Documentation}.
+    \item Google Developers. \textit{Web APIs: MediaDevices \& getUserMedia()}.
+    \item Mozilla Developer Network (MDN). \textit{JavaScript, HTML, and CSS Web Documentation}.
+    \item MySQL. \textit{MySQL 8.0 Reference Manual}.
+    \item PHP Group. \textit{PHP Manual – mysqli and password\_hash Functions}.
+    \item W3Schools. \textit{Web Development Tutorials (HTML, CSS, JavaScript, PHP)}.
+\end{enumerate}
+
+
+
+
+
+\clearpage
+
+\end{document}
+
